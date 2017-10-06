@@ -27,12 +27,12 @@ lazy val re = (project in file("replicated-entity"))
 lazy val cluster = (project in file("cluster"))
   .settings(
     libraryDependencies ++= clusterDeps,
-    libraryDependencies ++= clusterTestDeps,
+    libraryDependencies ++= clusterTestDeps
   )
 
 lazy val multiJvm = (project in file("multi-jvm"))
   .settings(
-    libraryDependencies += scalaTest,
+    libraryDependencies += scalaTest
   )
   .configs(MultiJvm)
   .settings(multiJvmSettings)
@@ -49,5 +49,15 @@ lazy val clusterTyped = (project in file("cluster-typed"))
     libraryDependencies ++= typedDeps,
     libraryDependencies ++= clusterDeps,
     libraryDependencies ++= typedTestDeps,
-    libraryDependencies ++= clusterTestDeps,
+    libraryDependencies ++= clusterTestDeps
   )
+
+lazy val basic = (project in file("basic"))
+    .settings(
+      libraryDependencies ++= basicDeps
+    )
+
+lazy val kafka = (project in file("kafka"))
+    .settings(
+      libraryDependencies ++= kafkaDeps
+    )

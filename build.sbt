@@ -61,3 +61,10 @@ lazy val kafka = (project in file("kafka"))
     .settings(
       libraryDependencies ++= kafkaDeps
     )
+
+lazy val streams = (project in file("streams"))
+    .settings(
+      libraryDependencies ++= streamsDeps,
+      libraryDependencies ++= streamsTestDeps
+    )
+

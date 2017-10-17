@@ -1,12 +1,11 @@
 package info.batey.akka.re
 
-import akka.actor.{ ActorSystem}
+import akka.actor.ActorSystem
 import akka.cluster.Cluster
-import akka.persistence.multidc.PersistenceMultiDcSettings
+import akka.persistence.multidc.{PersistenceMultiDcSettings, ReplicatedEventContext, SelfEventContext}
 import akka.persistence.multidc.scaladsl._
 
 import scala.io.StdIn
-
 
 sealed trait Command
 case class Deposit(amount: Int) extends Command
@@ -24,25 +23,15 @@ class Account extends ReplicatedEntity[Command, Event, State] {
 
   override def detectConcurrentUpdates = true
 
-  def actions = Actions { (cmd, state, ctx) =>
+  override def commandHandler = CommandHandler { (cmd, state, ctx) =>
     cmd match {
       case Deposit(amount) =>
-        ctx.thenPersist(Deposited(amount))
+        Effect.persist(Deposited(amount))
       case Withdraw(amount) =>
-        ctx.thenPersist(Withdrawn(amount))
-      case _ => ctx.unhandled
+        Effect.persist(Withdrawn(amount))
+      case _ =>
+        Effect.unhandled
     }
-  }
-
-  override def applySelfEvent(event: Event, state: State, ctx: ReplicatedEntity.SelfEventContext) = {
-    println("Self event: " + ctx)
-    applyEvent(event, state)
-  }
-
-
-  override def applyReplicatedEvent(event: Event, state: State, ctx: ReplicatedEntity.ReplicatedEventContext) = {
-    println("Replicated event: " + ctx)
-    applyEvent(event, state)
   }
 
   def applyEvent(event: Event, state: State) = {
@@ -53,15 +42,32 @@ class Account extends ReplicatedEntity[Command, Event, State] {
     println(newState)
     newState
   }
+
   override def recoveryCompleted(state: State, ctx: ActorContext) = {
     println("Recovery completed: " + ctx)
     super.recoveryCompleted(state, ctx)
   }
+
+  override def applySelfEvent(event: Event, state: State, ctx: SelfEventContext) =
+    super.applySelfEvent(event, state, ctx)
+
+  override def applyReplicatedEvent(event: Event, state: State, ctx: ReplicatedEventContext) =
+    super.applyReplicatedEvent(event, state, ctx)
+
+  //  override def applySelfEvent(event: Event, state: State, ctx: ReplicatedEntity.SelfEventContext) = {
+  //    println("Self event: " + ctx)
+  //    applyEvent(event, state)
+  //  }
+
+
+  //  override def applyReplicatedEvent(event: Event, state: State, ctx: ReplicatedEntity.ReplicatedEventContext) = {
+  //    println("Replicated event: " + ctx)
+  //    applyEvent(event, state)
+  //  }
+
 }
 
-object Main extends App {
-  println("hello")
-
+object ReplicatedEntityApp extends App {
   val system = ActorSystem("ClusterSystem")
   val cluster = Cluster(system)
 

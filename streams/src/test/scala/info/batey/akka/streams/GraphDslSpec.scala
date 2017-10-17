@@ -16,7 +16,10 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 
 
-class GraphDslSpec extends TestKit("GraphDslSpec") with WordLikeSpec with Matchers with ScalaFutures with BeforeAndAfterAll {
+class GraphDslSpec extends TestKit(ActorSystem("GraphDslSpec")) with WordSpecLike
+  with Matchers
+  with ScalaFutures
+  with BeforeAndAfterAll {
 
   implicit val materialiser: Materializer = ActorMaterializer()
 
@@ -28,10 +31,21 @@ class GraphDslSpec extends TestKit("GraphDslSpec") with WordLikeSpec with Matche
     "allow faning out" in {
       val oneToOneHundred = Source(1 to 100)
 
-      val evenAndOdd = RunnableGraph.fromGraph(GraphDSL.create() { implicit buildler =>
-        ???
+      val odds: Sink[Int, Future[Done]] = Sink.foreach((o: Int) => println(s"Odd: $o"))
+      val evens: Sink[Int, Future[Done]] = Sink.foreach((e: Int) => println(s"Even: $e"))
+
+      val evenAndOdd: RunnableGraph[NotUsed] = RunnableGraph.fromGraph(GraphDSL.create() { implicit builder: GraphDSL.Builder[NotUsed] =>
+        import GraphDSL.Implicits._
+
+        val bcast: UniformFanOutShape[Int, Int] = builder.add(Broadcast[Int](2))
+        oneToOneHundred ~> bcast.in
+        val toEvent = bcast.out(0) ~> Flow[Int].filter(_ % 2 == 0) ~> evens
+        val toOdd = bcast.out(1) ~> Flow[Int].filter(_ % 2 != 0) ~> odds
+
+        ClosedShape
       })
 
+      val ran: NotUsed = evenAndOdd.run()
     }
   }
 

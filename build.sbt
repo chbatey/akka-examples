@@ -54,7 +54,7 @@ lazy val clusterTyped = (project in file("cluster-typed"))
 
 lazy val basic = (project in file("basic"))
     .settings(
-      libraryDependencies ++= basicDeps
+      libraryDependencies ++= commonDeps
     )
 
 lazy val kafka = (project in file("kafka"))
@@ -67,4 +67,19 @@ lazy val streams = (project in file("streams"))
       libraryDependencies ++= streamsDeps,
       libraryDependencies ++= streamsTestDeps
     )
+
+lazy val persistence = (project in file("persistence"))
+      .settings(
+        libraryDependencies ++= persistenceDeps,
+        libraryDependencies ++= commonDeps,
+        libraryDependencies ++= commonTestDeps
+      )
+
+lazy val typedPersistence = (project in file("typed-persistence"))
+    .settings(
+      libraryDependencies ++= typedPersistenceDeps,
+      libraryDependencies ++= commonDeps,
+      libraryDependencies ++= commonTestDeps
+    )
+
 

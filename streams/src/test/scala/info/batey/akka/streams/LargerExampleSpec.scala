@@ -37,12 +37,12 @@ class LargerExampleSpec extends TestKit(ActorSystem("LargerExapleSpec")) with Wo
     }
 
     "throttling" in {
-      val done: Future[Done] = factorials
-        .zipWith(Source(1 to 10))((num, idx) => s"$idx => $num")
-        .throttle(1, 1.second, 1, ThrottleMode.Shaping)
-        .runForeach(println)
+//      val done: Future[Done] = factorials
+//        .zipWith(Source(1 to 10))((num, idx) => s"$idx => $num")
+//        .throttle(1, 1.second, 1, ThrottleMode.Shaping)
+//        .runForeach(println)
 
-      Await.ready(done, 12.seconds)
+//      Await.ready(done, 12.seconds)
     }
   }
 

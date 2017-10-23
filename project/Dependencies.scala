@@ -1,9 +1,10 @@
 import sbt._
 
 object Dependencies {
-  val akkaVersion = "2.5.6"
+  val akkaVersion = "2.5-SNAPSHOT"
   val akkaActors = "com.typesafe.akka" %% "akka-actor" % akkaVersion
   val akkaPersistence = "com.typesafe.akka" %% "akka-persistence" % akkaVersion
+  val akkaPersistentQuery = "com.typesafe.akka" %% "akka-persistence-query" % akkaVersion
   val akkaPersistenceCassandra = "com.typesafe.akka" %% "akka-persistence-cassandra" % "0.59-SNAPSHOT"
   val akkaRemoting = "com.typesafe.akka" %% "akka-remote" % akkaVersion
   val akkaTyped = "com.typesafe.akka" %% "akka-typed" % akkaVersion
@@ -16,13 +17,16 @@ object Dependencies {
   val leveldb = "org.iq80.leveldb" % "leveldb" % "0.7"
   val leveldbJni = "org.fusesource.leveldbjni" % "leveldbjni-all" % "1.8"
 
+  // Commercial
+  val diagnostics = "com.lightbend.akka" %% "akka-diagnostics" % "1.1-M4"
+
   val akkaStreamsTestkit = "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion
   val akkaTestkit = "com.typesafe.akka" %% "akka-testkit" % akkaVersion
   val akkaTypedTestkit = "com.typesafe.akka" %% "akka-typed-testkit" % akkaVersion
   val akkaMultiNodeTestKit = "com.typesafe.akka" %% "akka-multi-node-testkit" % akkaVersion
   val scalaTest = "org.scalatest" %% "scalatest" % "3.0.3"
 
-  val commonDeps = Seq(akkaActors, akkaRemoting)
+  val commonDeps = Seq(akkaActors, akkaRemoting, diagnostics)
   val commonTestDeps = Seq(akkaTestkit, akkaStreamsTestkit)
 
   val typedDeps = Seq(akkaTyped, akkaTyped)
@@ -41,6 +45,6 @@ object Dependencies {
   val streamsDeps = Seq(akkaStreams)
   val streamsTestDeps = Seq(scalaTest, akkaStreamsTestkit, akkaTestkit).map(_ % "test")
 
-  val typedPersistenceDeps = Seq(akkaPersistence, akkaPersistenceCassandra, akkaTyped)
-  val persistenceDeps = Seq(akkaPersistence, akkaPersistenceCassandra, leveldb, leveldbJni)
+  val typedPersistenceDeps = Seq(akkaPersistence, akkaPersistenceCassandra, akkaTyped, akkaPersistentQuery)
+  val persistenceDeps = Seq(akkaPersistence, akkaPersistenceCassandra, leveldb, leveldbJni, akkaPersistentQuery)
 }

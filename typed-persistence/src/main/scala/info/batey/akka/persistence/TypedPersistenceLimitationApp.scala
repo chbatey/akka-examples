@@ -1,23 +1,22 @@
 package info.batey.akka.persistence
 
 import akka.actor.ActorSystem
+import akka.typed._
 import akka.typed.persistence.scaladsl.PersistentActor
 import akka.typed.persistence.scaladsl.PersistentActor.{Persist, PersistNothing}
 import akka.typed.scaladsl._
 import akka.typed.scaladsl.adapter._
-import akka.typed._
 import akka.util.Timeout
 
 import scala.concurrent.duration._
 import scala.io.StdIn
 
-object TypedPersistenceApp extends App {
+object TypedPersistenceLimitationApp extends App {
   implicit val timeout: Timeout = Timeout(1.second)
   case class Balance(balance: Long)
 
   sealed trait Command
   final case class Deposit(a: Long) extends Command
-  final case class Withdraw(a: Long) extends Command
   final case class GetBalance(replyTo: ActorRef[Balance]) extends Command
 
   sealed trait Event
@@ -25,8 +24,8 @@ object TypedPersistenceApp extends App {
   final case class Withdrawn(a: Long) extends Event
 
   val bankBehaviour: Behavior[Command] =
-    PersistentActor.immutable[Command, Event, Balance](
-      persistenceId = "typedPersistence",
+    Actor.supervise(PersistentActor.immutable[Command, Event, Balance](
+      persistenceId = "typedPersistenceLimitation",
       initialState = Balance(0),
       actions = PersistentActor.Actions { (ctx, cmd, state) ⇒ {
         cmd match {
@@ -37,11 +36,6 @@ object TypedPersistenceApp extends App {
             } else {
               Persist(evt)
             }
-          case Withdraw(d) =>
-            if (state.balance > d)
-              Persist(Withdrawn(d))
-            else
-              PersistNothing()
           case GetBalance(replyTo) =>
             replyTo ! state
             PersistNothing()
@@ -53,7 +47,7 @@ object TypedPersistenceApp extends App {
           case Deposited(d) => state.copy(balance = state.balance + d)
           case Withdrawn(d) => state.copy(balance = state.balance - d)
         }
-      })
+      })).onFailure(SupervisorStrategy.restart)
 
 
   val driver = Actor.immutable[String] { (ctx, msg) => {
@@ -64,13 +58,8 @@ object TypedPersistenceApp extends App {
         myBankRef ! Deposit(1)
         myBankRef ! Deposit(2)
         myBankRef ! Deposit(100)
-        myBankRef ! Withdraw(50)
         myBankRef ! GetBalance(driverRef)
-        myBankRef ! Deposit(50000)
-
-        // Will get tagged 4 times
-        myBankRef ! Deposit(42)
-
+        myBankRef ! Deposit(1000)
       case other =>
         println(other)
     }
@@ -90,5 +79,6 @@ object TypedPersistenceApp extends App {
 
   println("waiting...")
   StdIn.readLine()
+  system.terminate()
   println("done")
 }

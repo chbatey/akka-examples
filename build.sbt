@@ -44,28 +44,34 @@ lazy val akkaMultiJvm = (project in file("akka-multi-jvm"))
   )
   .configs(MultiJvm)
 
-lazy val clusterTyped = (project in file("cluster-typed"))
+lazy val clusterTyped = (project in file("typed-cluster"))
   .settings(
     libraryDependencies ++= typedDeps,
     libraryDependencies ++= clusterDeps,
     libraryDependencies ++= typedTestDeps,
-    libraryDependencies ++= clusterTestDeps
+    libraryDependencies ++= clusterTestDeps,
+    libraryDependencies ++= commonDeps
   )
 
 lazy val basic = (project in file("basic"))
     .settings(
-      libraryDependencies ++= commonDeps
+      libraryDependencies ++= commonDeps,
+      libraryDependencies ++= commonTestDeps
     )
 
 lazy val kafka = (project in file("kafka"))
     .settings(
-      libraryDependencies ++= kafkaDeps
+      libraryDependencies ++= kafkaDeps,
+      libraryDependencies ++= commonDeps,
+      libraryDependencies ++= commonTestDeps
     )
 
 lazy val streams = (project in file("streams"))
     .settings(
       libraryDependencies ++= streamsDeps,
-      libraryDependencies ++= streamsTestDeps
+      libraryDependencies ++= streamsTestDeps,
+        libraryDependencies ++= commonDeps,
+      libraryDependencies ++= commonTestDeps
     )
 
 lazy val persistence = (project in file("persistence"))

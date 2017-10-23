@@ -9,7 +9,6 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 
 object TypedImmutableApp extends App {
-  println("Let's get typed")
 
   case class SayHello(replyTo: ActorRef[String])
 

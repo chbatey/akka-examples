@@ -30,6 +30,22 @@ lazy val cluster = (project in file("cluster"))
     libraryDependencies ++= clusterTestDeps
   )
 
+lazy val clusterSharding = (project in file("cluster-sharding"))
+  .settings(
+    libraryDependencies ++= clusterDeps,
+    libraryDependencies ++= clusterTestDeps,
+    libraryDependencies ++= commonDeps,
+    libraryDependencies ++= commonTestDeps
+  )
+
+lazy val clusterSingleton = (project in file("cluster-singleton"))
+  .settings(
+    libraryDependencies ++= clusterDeps,
+    libraryDependencies ++= clusterTestDeps,
+    libraryDependencies ++= commonDeps,
+    libraryDependencies ++= commonTestDeps
+  )
+
 lazy val multiJvm = (project in file("multi-jvm"))
   .settings(
     libraryDependencies += scalaTest
@@ -44,6 +60,7 @@ lazy val akkaMultiJvm = (project in file("akka-multi-jvm"))
   )
   .configs(MultiJvm)
 
+
 lazy val clusterTyped = (project in file("typed-cluster"))
   .settings(
     libraryDependencies ++= typedDeps,
@@ -54,38 +71,52 @@ lazy val clusterTyped = (project in file("typed-cluster"))
   )
 
 lazy val basic = (project in file("basic"))
-    .settings(
-      libraryDependencies ++= commonDeps,
-      libraryDependencies ++= commonTestDeps
-    )
+  .settings(
+    libraryDependencies ++= commonDeps,
+    libraryDependencies ++= commonTestDeps
+  )
 
 lazy val kafka = (project in file("kafka"))
-    .settings(
-      libraryDependencies ++= kafkaDeps,
-      libraryDependencies ++= commonDeps,
-      libraryDependencies ++= commonTestDeps
-    )
+  .settings(
+    libraryDependencies ++= kafkaDeps,
+    libraryDependencies ++= commonDeps,
+    libraryDependencies ++= commonTestDeps
+  )
 
 lazy val streams = (project in file("streams"))
-    .settings(
-      libraryDependencies ++= streamsDeps,
-      libraryDependencies ++= streamsTestDeps,
-        libraryDependencies ++= commonDeps,
-      libraryDependencies ++= commonTestDeps
-    )
+  .settings(
+    libraryDependencies ++= streamsDeps,
+    libraryDependencies ++= streamsTestDeps,
+    libraryDependencies ++= commonDeps,
+    libraryDependencies ++= commonTestDeps
+  )
 
 lazy val persistence = (project in file("persistence"))
-      .settings(
-        libraryDependencies ++= persistenceDeps,
-        libraryDependencies ++= commonDeps,
-        libraryDependencies ++= commonTestDeps
-      )
+  .settings(
+    libraryDependencies ++= persistenceDeps,
+    libraryDependencies ++= commonDeps,
+    libraryDependencies ++= commonTestDeps
+  )
 
 lazy val typedPersistence = (project in file("typed-persistence"))
-    .settings(
-      libraryDependencies ++= typedPersistenceDeps,
-      libraryDependencies ++= commonDeps,
-      libraryDependencies ++= commonTestDeps
-    )
+  .settings(
+    libraryDependencies ++= typedPersistenceDeps,
+    libraryDependencies ++= commonDeps,
+    libraryDependencies ++= commonTestDeps
+  )
 
+lazy val akkaHttp = (project in file("http"))
+  .settings(
+    libraryDependencies ++= httpDeps,
+    libraryDependencies ++= httpTestDeps,
+    libraryDependencies ++= commonDeps,
+    libraryDependencies ++= commonTestDeps
+  )
+
+lazy val slickAlpakka = (project in file("slick-alpakka"))
+  .settings(
+    libraryDependencies ++= slickAlpakkaDeps,
+    libraryDependencies ++= commonDeps,
+    libraryDependencies ++= commonTestDeps
+  )
 

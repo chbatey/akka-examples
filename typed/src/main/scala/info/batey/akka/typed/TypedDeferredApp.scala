@@ -19,5 +19,4 @@ object TypedDeferredApp extends App {
   val supervised: Behavior[String] = Actor.supervise(immutable)
     .onFailure(SupervisorStrategy.restart)
 
-
 }

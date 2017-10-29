@@ -8,14 +8,13 @@ import akka.typed.scaladsl.adapter._
 import akka.typed._
 import akka.util.Timeout
 
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
-import scala.io.StdIn
 
 object TypedPersistenceBrokenApp extends App {
 
   val system = ActorSystem("Persistence")
-  implicit val timeout: Timeout = Timeout(1.second)
+  implicit val timeout: Timeout = Timeout(5.second)
   implicit val scheduler: Scheduler = system.scheduler
 
   case class State(carers: Set[String])
@@ -33,8 +32,8 @@ object TypedPersistenceBrokenApp extends App {
       initialState = State(Set.empty[String]),
       actions = PersistentActor.Actions { (ctx, cmd, state) => {
         cmd match {
-          case IThinkICare(who) =>
-            Persist(ICare(who))
+          case IThinkICare(w) =>
+            Persist(ICare(w))
           case WhoCares(iWantToKnow) =>
             iWantToKnow ! state
             PersistNothing()
@@ -43,8 +42,8 @@ object TypedPersistenceBrokenApp extends App {
       },
       applyEvent = (evt, state) => {
         evt match {
-          case ICare(who) =>
-            state.copy(carers = state.carers + who)
+          case ICare(w) =>
+            state.copy(carers = state.carers + w)
         }
       }
     )
@@ -55,6 +54,6 @@ object TypedPersistenceBrokenApp extends App {
 
   val who: Future[State] = ref ? (WhoCares(_))
 
-  StdIn.readLine()
+  println(Await.result(who, 10.seconds))
   system.terminate()
 }

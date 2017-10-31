@@ -27,7 +27,9 @@ lazy val re = (project in file("replicated-entity"))
 lazy val cluster = (project in file("cluster"))
   .settings(
     libraryDependencies ++= clusterDeps,
-    libraryDependencies ++= clusterTestDeps
+    libraryDependencies ++= clusterTestDeps,
+      libraryDependencies ++= commonDeps,
+    libraryDependencies ++= commonTestDeps
   )
 
 lazy val clusterSharding = (project in file("cluster-sharding"))
@@ -46,9 +48,18 @@ lazy val clusterSingleton = (project in file("cluster-singleton"))
     libraryDependencies ++= commonTestDeps
   )
 
+lazy val multiDc = (project in file("cluster-multidc"))
+  .settings(
+    libraryDependencies ++= clusterDeps,
+    libraryDependencies ++= clusterTestDeps,
+    libraryDependencies ++= commonDeps,
+    libraryDependencies ++= commonTestDeps
+  )
+
 lazy val multiJvm = (project in file("multi-jvm"))
   .settings(
-    libraryDependencies += scalaTest
+    libraryDependencies += scalaTest,
+    libraryDependencies ++= clusterDeps
   )
   .configs(MultiJvm)
   .settings(multiJvmSettings)
@@ -56,6 +67,7 @@ lazy val multiJvm = (project in file("multi-jvm"))
 lazy val akkaMultiJvm = (project in file("akka-multi-jvm"))
   .settings(
     libraryDependencies ++= multiNodeAkka,
+    libraryDependencies ++= clusterDeps,
     multiJvmSettings
   )
   .configs(MultiJvm)

@@ -56,7 +56,8 @@ class FailureSample extends MultiNodeSpec(FailureConfig) with STMultiNodeSpec wi
         val server = identify(serverNode, "us-slow")
         val client = system.actorOf(Props(classOf[CachingClient], server))
         client ! Get("1")
-        expectMsg(Response(Value("apple"), )
+//        expectMsg(Response(Value("apple"), )
+        //FIXME finish
       }
 
       runOn(serverNode) {

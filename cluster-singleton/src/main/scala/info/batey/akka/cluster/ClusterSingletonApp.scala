@@ -1,6 +1,7 @@
 package info.batey.akka.cluster
 
 import akka.actor.{Actor, ActorSystem, PoisonPill, Props}
+import akka.cluster.Cluster
 import akka.cluster.singleton.{ClusterSingletonManager, ClusterSingletonManagerSettings, ClusterSingletonProxy, ClusterSingletonProxySettings}
 
 import scala.io.StdIn
@@ -16,6 +17,7 @@ object ClusterSingletonApp extends App {
   }
 
   val system = ActorSystem("singleton")
+  val cluster = Cluster(system)
 
   val ref = system.actorOf(
     ClusterSingletonManager.props(
@@ -33,6 +35,8 @@ object ClusterSingletonApp extends App {
   proxy ! "hi"
   proxy ! "there"
 
+  println(cluster.state)
   StdIn.readLine()
+  println(cluster.state)
   system.terminate()
 }

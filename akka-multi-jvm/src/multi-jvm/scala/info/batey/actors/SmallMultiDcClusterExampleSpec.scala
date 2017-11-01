@@ -62,7 +62,7 @@ abstract class SmallMultiDcClusterExampleSpec extends MultiNodeSpec(SmallMultiDc
       enterBarrier("node one up")
     }
 
-    "all nodes joi" in {
+    "all nodes join" in {
       runOn(two, three, four) {
         cluster.join(node(one).address)
       }
@@ -74,6 +74,7 @@ abstract class SmallMultiDcClusterExampleSpec extends MultiNodeSpec(SmallMultiDc
           cluster.state.members.filter(_.status == MemberStatus.Up) should have size 4
         })
       }
+      log.info("Node sees all other nodes as up")
       enterBarrier("all done")
     }
   }

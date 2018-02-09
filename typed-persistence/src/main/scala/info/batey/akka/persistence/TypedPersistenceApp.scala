@@ -10,7 +10,7 @@ import akka.util.Timeout
 
 import scala.concurrent.duration._
 import scala.io.StdIn
-
+/*
 object TypedPersistenceApp extends App {
   implicit val timeout: Timeout = Timeout(1.second)
   case class Balance(balance: Long)
@@ -92,3 +92,4 @@ object TypedPersistenceApp extends App {
   StdIn.readLine()
   println("done")
 }
+*/

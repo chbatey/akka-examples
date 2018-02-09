@@ -4,7 +4,7 @@ import akka.NotUsed
 import akka.actor.{ActorSystem, Props}
 import akka.persistence.PersistentActor
 import akka.persistence.cassandra.query.scaladsl.CassandraReadJournal
-import akka.persistence.query.{EventEnvelope, PersistenceQuery}
+import akka.persistence.query.{EventEnvelope, NoOffset, PersistenceQuery}
 import akka.stream.{ActorMaterializer, scaladsl}
 import akka.stream.scaladsl._
 
@@ -43,6 +43,8 @@ object AllPersistenceIds extends App {
   println("Persistence IDs" + Await.result(all, 10.seconds))
 
   val allEvents: Future[immutable.Seq[EventEnvelope]] = readJournal.currentEventsByPersistenceId("p1", 0, Long.MaxValue).runWith(Sink.seq)
+
+  val x: Source[EventEnvelope, NotUsed] = readJournal.eventsByTag("", NoOffset)
 
   println("Events" + Await.result(allEvents, 10.seconds))
 

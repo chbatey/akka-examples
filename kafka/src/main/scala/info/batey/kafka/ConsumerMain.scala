@@ -6,7 +6,7 @@ import akka.kafka.scaladsl.Consumer
 import akka.kafka.{ConsumerSettings, Subscriptions}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl._
-import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord}
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,7 +34,7 @@ object ConsumerMain extends App {
 //    Consumer.plainSource(consumerSettings, sub)
 //  })
 
- val source = Consumer.plainSource(consumerSettings, sub)
+ val source: Source[ConsumerRecord[Array[Byte], String], Consumer.Control] = Consumer.plainSource(consumerSettings, sub)
 
   val exit: Future[Done] = source.runForeach {
     record => println(s"Record: $record")

@@ -10,27 +10,26 @@ import scala.io.StdIn
 object Main extends App {
 
   implicit val timeout = Timeout(1.second)
-  val actorSystem = ActorSystem()
-  import actorSystem.dispatcher
+  val system = ActorSystem()
+  import system.dispatcher
 
-  println("Started")
-
-  val a = actorSystem.actorOf(Props[BestActor])
+  val a = system.actorOf(Props[BestActor], "the-best")
 
   a ! "one"
   a ! "two"
 
-  val x = (a ? "cat")
+  val x = a ? "cat"
 
   x.onComplete(println)
-
-  StdIn.readLine()
-
 }
 
 class BestActor extends Actor {
   def receive = {
-    case msg => println(msg)
+    case "cat" =>
+      println("cat")
+      sender() ! "you're the best"
+    case msg =>
+      println(msg)
   }
 }
 

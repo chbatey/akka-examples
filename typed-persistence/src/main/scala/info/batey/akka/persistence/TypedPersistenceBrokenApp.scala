@@ -10,7 +10,7 @@ import akka.util.Timeout
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
-
+/*
 object TypedPersistenceBrokenApp extends App {
 
   val system = ActorSystem("Persistence")
@@ -57,3 +57,4 @@ object TypedPersistenceBrokenApp extends App {
   println(Await.result(who, 10.seconds))
   system.terminate()
 }
+*/

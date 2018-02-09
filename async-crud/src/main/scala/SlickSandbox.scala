@@ -1,0 +1,3 @@
+object SlickSandbox extends App {
+
+}

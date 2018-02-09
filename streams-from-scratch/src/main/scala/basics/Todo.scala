@@ -1,0 +1,33 @@
+package basics
+
+import akka.stream.OverflowStrategy
+import akka.stream.scaladsl._
+
+object Todo {
+/*
+  //TODO
+  Source.tick(???, ???, ???)
+  Source.unfold(???)(???)
+  Source.unfoldAsync(???)(???)
+  Source.unfoldResource(???, ???, ???)
+  Source.unfoldResourceAsync(???, ???, ???)
+
+  val queue: Source[Int, SourceQueueWithComplete[Int]] = Source.queue[Int](100, OverflowStrategy.backpressure)
+
+  Source.combine(???, ???, ???)(???)
+
+  Source.failed(new Throwable("oh dear"))
+
+  Source.actorRef(100, OverflowStrategy.dropNew)
+
+  Source.combineMat(???, ???)(???)
+
+  Source.cycle(???)
+
+  Source.fromFuture(???)
+
+  Source.maybe
+  */
+}
+
+

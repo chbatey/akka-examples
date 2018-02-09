@@ -9,6 +9,4 @@ object CustomSessionProviderApp extends App {
       |
     """.stripMargin
   )
-
-
 }

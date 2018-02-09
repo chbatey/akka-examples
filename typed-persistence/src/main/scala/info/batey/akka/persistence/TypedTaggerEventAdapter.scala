@@ -1,6 +1,7 @@
 package info.batey.akka.persistence
 
 import akka.persistence.journal.{EventAdapter, EventSeq, SingleEventSeq, Tagged}
+/*
 import info.batey.akka.persistence.TypedPersistenceApp.{Deposited, Withdrawn}
 
 class TypedTaggerEventAdapter extends EventAdapter {
@@ -27,3 +28,4 @@ class TypedTaggerEventAdapter extends EventAdapter {
     }
   }
 }
+*/
